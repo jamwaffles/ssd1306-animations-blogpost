@@ -1,0 +1,31 @@
+[package]
+name = "ssd1306-animations-blogpost"
+version = "0.1.0"
+authors = ["James Waples <jamwaffles@gmail.com>"]
+publish = false
+
+[dependencies]
+cortex-m = "0.4.3"
+cortex-m-rt = "0.4.0"
+cortex-m-rtfm = "0.3.1"
+cortex-m-rtfm-macros = "0.3.0"
+embedded-hal = "0.1.2"
+ssd1306 = "0.1.0"
+panic-abort = "0.1.1"
+
+# Use a fork of the HAL crate with I2C support. See japaric/stm32f103xx-hal#50 for progress
+[dependencies.stm32f103xx-hal]
+git = "https://github.com/ilya-epifanov/stm32f103xx-hal.git"
+rev = "7bd945727d381aedfec5761c1463001e8966f85e"
+features = ["rt"]
+version = "*"
+
+# disable both incremental compilation and parallel codegen to reduce the chances of running into
+# rust-lang/rust#47074
+[profile.dev]
+codegen-units = 1
+incremental = false
+
+[profile.release]
+debug = true
+lto = true
