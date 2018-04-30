@@ -12,8 +12,8 @@ extern crate ssd1306;
 extern crate stm32f103xx_hal as hal;
 
 use cortex_m_rtfm_macros::app;
+use embedded_graphics::image::Image1BPP;
 use embedded_graphics::prelude::*;
-use embedded_graphics::primitives::Rect;
 use hal::delay::Delay;
 use hal::gpio::gpiob::{PB8, PB9};
 use hal::gpio::{Alternate, OpenDrain};
@@ -38,7 +38,7 @@ app! {
 
     resources: {
         static DISP: OledDisplay;
-        static RECT: Rect;
+        static IMAGE: Image1BPP<'static>;
         static POS: Position = (0, 0);
         static XDELTA: i32 = 1;
         static YDELTA: i32 = 1;
@@ -47,7 +47,7 @@ app! {
     tasks: {
         SYS_TICK: {
             path: tick,
-            resources: [DISP, RECT, POS, XDELTA, YDELTA],
+            resources: [DISP, IMAGE, POS, XDELTA, YDELTA],
         },
     },
 }
@@ -81,11 +81,11 @@ fn init(p: init::Peripherals, _r: init::Resources) -> init::LateResources {
     disp.init().unwrap();
     disp.flush().unwrap();
 
-    let rect = Rect::new((0, 0), (SQUARE_SIZE, SQUARE_SIZE), 1);
+    let image = Image1BPP::new(include_bytes!("../rust.raw"), SQUARE_SIZE, SQUARE_SIZE);
 
     init::LateResources {
         DISP: disp,
-        RECT: rect,
+        IMAGE: image,
     }
 }
 
@@ -101,7 +101,7 @@ fn tick(_t: &mut Threshold, mut r: SYS_TICK::Resources) {
     r.DISP.clear();
 
     r.DISP
-        .draw(r.RECT.translate((r.POS.0, r.POS.1)).into_iter());
+        .draw(r.IMAGE.translate((r.POS.0, r.POS.1)).into_iter());
 
     r.DISP.flush().unwrap();
 
