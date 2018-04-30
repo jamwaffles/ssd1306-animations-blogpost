@@ -7,8 +7,8 @@ publish = false
 [dependencies]
 cortex-m = "0.4.3"
 cortex-m-rt = "0.4.0"
-cortex-m-rtfm = "0.3.1"
-cortex-m-rtfm-macros = "0.3.0"
+cortex-m-rtfm = "0.3.2"
+cortex-m-rtfm-macros = "0.3.1"
 embedded-hal = "0.1.2"
 ssd1306 = "0.1.0"
 panic-abort = "0.1.1"
