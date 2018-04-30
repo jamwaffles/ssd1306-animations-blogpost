@@ -1,6 +1,7 @@
 #![no_std]
 
 extern crate cortex_m;
+extern crate embedded_graphics;
 extern crate embedded_hal as hal;
 extern crate panic_abort;
 extern crate ssd1306;
@@ -8,6 +9,8 @@ extern crate stm32f103xx_hal as blue_pill;
 
 use blue_pill::i2c::{DutyCycle, I2c, Mode};
 use blue_pill::prelude::*;
+use embedded_graphics::prelude::*;
+use embedded_graphics::primitives::Rect;
 use ssd1306::prelude::*;
 use ssd1306::Builder;
 
@@ -38,7 +41,7 @@ fn main() {
     disp.init().unwrap();
     disp.flush().unwrap();
 
-    disp.set_pixel(0, 0, 1);
+    disp.draw(Rect::new((0, 0), (24, 24), 1).into_iter());
 
     disp.flush().unwrap();
 }
